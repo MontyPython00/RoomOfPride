@@ -1,0 +1,48 @@
+from translate import Translator
+
+class Invalid_letter(Exception):
+    pass
+
+def translating():
+    text = input('Insert text to translate:')
+    translator = Translator(to_lang='de')
+    text_translated = translator.translate(text)
+    return text_translated
+def ask_user():
+    letter = input('Do you want to translate another word/sentence?\ny/n:')
+    return letter
+repeat = 'y'
+count_use=0
+while repeat == 'y':
+    prevent = 's'
+    answer = 's'
+    i = 0
+    i_2 = 0
+    count_use+=1
+    translated_text = translating()
+    print(translated_text)
+    while ((answer != 'y') and (answer != 'n')) and (i_2 < 3):
+        try:
+            answer = input('Do you want to save it as a file?\ny/n:')
+            i_2 += 1
+            if answer == 'y':
+                print('If a file name is same as earlier, will append translated text to the next line')
+                name_f = input('File name:')
+                open(f'{name_f}.txt', 'a+').write(f'{count_use}.{translated_text}\n')
+            elif answer == 'n':
+                break
+            else:
+                raise Invalid_letter
+        except Invalid_letter:
+            print('Insert valid letter')
+
+    while ((prevent != 'y') and (prevent != 'n')) and (i < 3):
+        try:
+            i+=1
+            prevent = ask_user()
+            repeat = prevent
+            if (prevent != 'y') and (prevent != 'n'):
+                raise Invalid_letter
+        except Invalid_letter:
+            print('Insert valid letter')
+
