@@ -45,4 +45,3 @@ while repeat == 'y':
                 raise Invalid_letter
         except Invalid_letter:
             print('Insert valid letter')
-
