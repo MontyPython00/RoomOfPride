@@ -1,0 +1,191 @@
+from PIL import Image
+from PIL import ImageFilter
+import os
+
+class InvalidNumberError(Exception):
+    pass
+clear = lambda: os.system('cls')
+
+def show(sel_img):
+
+    with Image.open(f'./Images/{li[sel_img]}') as im:
+        im.show()
+
+def rotate(sel_img):
+    i = 0
+    while True:
+        try:
+            if i == 0:
+                degrees = int(input('Degrees:'))
+                clear()
+                choice_r = int(input('Display/Save\n1.Display\n2.Save\nSelect number:'))
+                if choice_r > 2: raise InvalidNumberError
+                else:pass
+                if choice_r == 2:
+                    file_n = input('Save as(file name):')
+                clear()
+            else:
+                re_enter = int(input('1.Degrees\n2.Exit\nSelect number:'))
+                if re_enter > 2: raise InvalidNumberError
+                else:pass
+                clear()
+                match re_enter:
+                    case 1:
+                        degrees = int(input('Degrees:'))
+                        clear()
+                    case 2:
+                        break
+                choice_r = int(input('Display/Save\n1.Display\n2.Save\nSelect number:'))
+                if choice_r > 2: raise InvalidNumberError
+                else:pass
+                if choice_r == 2:
+                    file_n = input('Save as(file name):')
+                    clear()
+            i+= 1
+            with Image.open(f'./Images/{li[sel_img]}') as im: #here x(what img)
+                match choice_r:
+                    case 1:
+                        im.rotate(degrees).show()
+                        choice_save = int(input('Save:\n1.Yes\n2.No\nSelect number:'))
+                        if choice_save > 2: raise InvalidNumberError
+                        clear()
+                        match choice_save:
+                            case 1:
+                                file_n = input('Saves as(file name):')
+                                im.rotate(degrees).save(f'./Images/{file_n}.jpg')
+                                clear()
+                            case 2:
+                                pass
+                    case 2:
+                        im.rotate(degrees).save(f'./Images/{file_n}.jpg')
+                        clear()
+        except ValueError:
+            print('Insert number')
+        except InvalidNumberError:
+            print('Insert valid number')
+
+def blur(sel_img):
+    i = 0
+    while True:
+        if i == 0:
+            blurred = int(input('How strong:'))
+            clear()
+            choice_b = int(input('Display/Save\n1.Display\n2.Save\nSelect number:'))
+            if choice_b == 2:
+                file_n = input('Save as(file name):')
+                clear()
+        else:
+            re_enter = int(input('1.Change blurr\n2.Exit\nSelect number:'))
+            clear()
+            match re_enter:
+                case 1:
+                    blurred = int(input('How strong:'))
+                    clear()
+                case 2:
+                    break
+            choice_b = int(input('Display/Save\n1.Display\n2.Save\nSelect number:'))
+            clear()
+            if choice_b == 2:
+                file_n = input('Save as(file name):')
+        i+= 1
+        with Image.open(f'./Images/{li[sel_img]}') as im: #here x(what img)
+            match choice_b:
+                case 1:
+                    im.filter(ImageFilter.GaussianBlur(radius=blurred)).show()
+                    choice_save = int(input('Save:\n1.Yes\n2.No\nSelect number:'))
+                    clear()
+                    match choice_save:
+                        case 1:
+                            file_n = input('Saves as(file name):')
+                            im.filter(ImageFilter.GaussianBlur(radius=blurred)).save(f'./Images/{file_n}.jpg')
+                            clear()
+                        case 2:
+                            pass
+                case 2: #save
+                    im.rotate(blurred).save(f'./Images/{file_n}.jpg')
+                    clear()
+
+def resize(sel_img):
+    i = 0
+    while True:
+        if i == 0:
+            size_h = int(input('Height of Image:'))
+            size_w = int(input('Width of Image:'))
+            clear()
+            choice_size = int(input('Display/Save\n1.Display\n2.Save\nSelect number:'))
+            clear()
+            if choice_size == 2:
+                file_n = input('Save as(file name):')
+                clear()
+        else:
+            re_enter = int(input('1.Change size\n2.Exit\nSelect number:'))
+            clear()
+            match re_enter:
+                case 1:
+                    size_h = int(input('Height of Image:'))
+                    size_w = int(input('Width of Image:'))
+                    clear()
+                case 2:
+                    break
+            choice_size = int(input('Display/Save\n1.Display\n2.Save\nSelect number:'))
+            clear()
+            if choice_size == 2:
+                file_n = input('Save as(file name):')
+                clear()
+        i+= 1
+        with Image.open(f'./Images/{li[sel_img]}') as im: #here x(what img)
+            match choice_size:
+                case 1:
+                    im.resize((size_w, size_h)).show()
+                    choice_save = int(input('Save:\n1.Yes\n2.No\nSelect number:'))
+                    clear()
+                    match choice_save:
+                        case 1:
+                            file_n = input('Saves as(file name):')
+                            im.resize((size_w, size_h)).save(f'./Images/{file_n}.jpg')
+                            clear()
+                        case 2:
+                            pass
+                case 2:
+                    im.resize((size_w, size_h)).save(f'./Images/{file_n}.jpg')
+                    clear()
+
+
+while True:
+    main_menu = int(input('1.Show list\n2.Exit\nSelect number:'))
+    if main_menu == 1:
+
+        #listed images
+        c = os.listdir('./Images/')
+        li = []
+        for x, i in enumerate(c):
+            x+=1
+            li.append(i)
+            print(f'{x}.{i}')
+        # selected img by user
+        user_sel = int(input('Select image:'))
+        selected_img = user_sel - 1
+
+        clear()
+        while True:
+            #Options
+            choice_1 = int(input('1.Display image\n'
+                                 '2.Resize image\n'
+                                 '3.Blurr image\n'
+                                 '4.Rotate image\n'
+                                 '5.Exit\n'
+                                 'Select number:'))
+            clear()
+            match choice_1:
+                case 1:
+                    show(selected_img)
+                case 2:
+                    resize(selected_img)
+                case 3:
+                    blur(selected_img)
+                case 4:
+                    rotate(selected_img)
+                case 5:
+                    break
+            clear()
+    else: break
